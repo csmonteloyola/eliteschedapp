@@ -1,10 +1,12 @@
 (function(){
 	'use strict';
 
-	angular.module("eliteApp").controller("TeamDetailCtrl",['$stateParams', '$ionicPopup', 'eliteApi', TeamDetailCtrl])
+	angular.module("eliteApp").controller("TeamDetailCtrl",['$stateParams', '$ionicPopup', 'eliteApi', 'myTeamsService', TeamDetailCtrl])
 
-	function TeamDetailCtrl($stateParams,$ionicPopup, eliteApi){
-		var vm = this;
+	function TeamDetailCtrl($stateParams,$ionicPopup, eliteApi,myTeamsService){
+		var vm = this,
+			team = null,
+			leagueData = null;
 
 		
 
@@ -57,10 +59,12 @@
 				confirmPopup.then(function(res){
 					if (res){
 						vm.following = !vm.following;
+						myTeamsService.unfollowTeam(team.id)
 					}
 				})
 			}else{
 				vm.following = !vm.following;
+				myTeamsService.followTeam({ id: team.id, name: team.name, leagueId: leagueData.id, leagueName: leagueData.name });
 			}
 			
 		}
